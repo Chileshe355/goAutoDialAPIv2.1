@@ -1,4 +1,7 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set('display_errors',1); 
+
 /**
  * @file    	goAPI.php
  * @brief     	API to handle every API
@@ -21,10 +24,10 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **/
-    include_once ("../goDBasterisk.php");
-    include_once ("../goDBgoautodial.php");
-    include_once ("../goDBkamailio.php");
-    include_once ("../goFunctions.php");
+    include_once ("goDBasterisk.php");
+    include_once ("goDBgoautodial.php");
+    include_once ("goDBkamailio.php");
+    include_once ("goFunctions.php");
     
     /* Check if DB variables are not set */
 	$VARDB_server   = (!isset($VARDB_server)) ? "localhost" : $VARDB_server;
@@ -107,7 +110,7 @@
     //$query_user = "SELECT user,pass FROM vicidial_users WHERE user='$goUser' AND $passSQL";
     //$rslt=mysqli_query($link, $query_user);
     $astDB->where("user", $goUser);
-    if($system_settings['pass_hash_enabled'] > 0 )
+    if($system_settings['pass_hash_enabled'] < 1 )
     	$astDB->where("pass_hash", $pass_hash);
     else
         $astDB->where("pass", $pass);
@@ -115,20 +118,26 @@
     $check_result = $astDB->count;
 	
     if ($check_result > 0) {
-        //$includeAction = basename(realpath($goAction . ".php"));
-        if (strpos($goAction, '/') === false && file_exists($goAction . ".php")) {
-            include $goAction . ".php";
-            //$apiresults = array( "result" => "success", "message" => "Command Not Found" );
-        } else {
-    		$apiresults = array( "result" => "error", "message" => "Command Not Found" );
-        }    
-    } else {        
-        $apiresults = array( "result" => "error", "message" => "Invalid Username/Password" );        
-    }
+        /* Updated Dynamic Folder-Based Routing Logic */
+        $basePath = __DIR__; // Base directory
+        $folders = array_filter(glob("$basePath/*"), 'is_dir'); // List of subdirectories
+        $fileFound = false; // Track if a matching file is found
     
-	if (!isset($userResponseType) || strlen($userResponseType) < 1) {
-		$userResponseType = "xml";
-	}
+        foreach ($folders as $folder) {
+            $actionPath = "$folder/$goAction.php"; // Construct the path to the file
+            if (file_exists($actionPath)) {
+                include $actionPath; // Include the matching file
+                $fileFound = true;
+                break; // Stop searching once the file is found
+            }
+        }
+    
+        if (!$fileFound) {
+            $apiresults = array("result" => "error", "message" => "Command Not Found");
+        }
+    } else {        
+        $apiresults = array("result" => "error", "message" => "Invalid Username/Password");        
+    }
     
     /* API OUTPUT */
     ob_start();
