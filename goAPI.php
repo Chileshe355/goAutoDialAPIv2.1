@@ -64,11 +64,12 @@ ini_set('display_errors',1);
 		
 	/* Standard goAPI variables */
 	
-    $log_user     = $session_user ?? '';
-    $log_group    = go_get_groupid($session_user ?? '', $astDB);    
-    $log_ip       = $astDB->escape($_REQUEST['log_ip']);
-    $goUser       = $astDB->escape($_REQUEST['goUser']);
-    $goPass       = (isset($_REQUEST['log_pass']) ? $astDB->escape($_REQUEST['log_pass']) : $astDB->escape($_REQUEST['goPass']));		
+    $log_user       = $session_user ?? '';
+    $log_group      = go_get_groupid($session_user ?? '', $astDB);    
+    // $log_ip         = $astDB->escape($_REQUEST['log_ip']);  old version where ip is expercted with request 
+    $log_ip         = isset($_REQUEST['log_ip']) ? $astDB->escape($_REQUEST['log_ip']) : '0.0.0.0'; // assign optional ip 
+    $goUser         = $astDB->escape($_REQUEST['goUser']);
+    $goPass         = (isset($_REQUEST['log_pass']) ? $astDB->escape($_REQUEST['log_pass']) : $astDB->escape($_REQUEST['goPass']));		
 		
     define('DEFAULT_USERS', array('VDAD','VDCL', 'goAPI'));
 
