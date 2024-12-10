@@ -133,7 +133,7 @@
         }
     
         if (!$fileFound) {
-            $apiresults = array("result" => "error", "message" => "Command Not Found");
+            $apiresults = array("result" => "error", "message" => "Command Not Found please try again.");
         }
     } else {        
         $apiresults = array("result" => "error", "message" => "Invalid Username/Password");        
