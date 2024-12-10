@@ -24,7 +24,7 @@ else
     exit 1
 fi
 
-# Step 3: Move the cloned repository to the target directory
+# Step 3: Move the cloned repository to the target directory 
 echo "Moving the cloned repository to $TARGET_DIR..."
 sudo mv "$TEMP_DIR" "$TARGET_DIR"
 echo "Replaced directory with the latest version from the repository."
