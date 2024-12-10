@@ -1967,14 +1967,21 @@
         }
     }
 	
-	function encrypt_passwd($pass, $cost, $salt = null) {
-		$pass_options = [
-			'cost' => $cost,
-			'salt' => base64_encode($salt)
-		];
-		$pass_hash = password_hash($pass, PASSWORD_BCRYPT, $pass_options);
-		return substr($pass_hash, 29, 31);
-	}
+	// function encrypt_passwd($pass, $cost, $salt = null) {
+	// 	$pass_options = [
+	// 		'cost' => $cost,
+	// 		'salt' => base64_encode($salt)
+	// 	];
+	// 	$pass_hash = password_hash($pass, PASSWORD_BCRYPT, $pass_options);
+	// 	return substr($pass_hash, 29, 31);
+	// }
+    function encrypt_passwd($pass, $cost) {
+        $pass_options = [
+            'cost' => $cost
+        ];
+        $pass_hash = password_hash($pass, PASSWORD_BCRYPT, $pass_options);
+        return $pass_hash; // Return the full hash to ensure proper validation later
+    }
 	
 	function nl($string) {
 		if(isset($_SERVER['SHELL'])) return preg_replace('/\<br(\s*)?\/?\>/i', PHP_EOL, $string);
