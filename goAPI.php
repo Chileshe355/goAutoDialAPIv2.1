@@ -111,7 +111,7 @@ ini_set('display_errors',1);
     //$query_user = "SELECT user,pass FROM vicidial_users WHERE user='$goUser' AND $passSQL";
     //$rslt=mysqli_query($link, $query_user);
     $astDB->where("user", $goUser);
-    if($system_settings['pass_hash_enabled'] < 1 ) // change to bypass need for hashed passwords 
+    if($system_settings['pass_hash_enabled'] < 0 )
     	$astDB->where("pass_hash", $pass_hash);
     else
         $astDB->where("pass", $pass);
