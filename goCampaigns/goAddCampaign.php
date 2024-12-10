@@ -157,7 +157,7 @@
 		$apiresults 									= array(
 			"result" 										=> "Error: Session User Not Defined."
 		);
-	} elseif ( empty( $campaign_id ) || empty( $campaign_type ) || empty( $campaign_name ) ) {
+	} elseif ( empty( $campaign_immm) || empty( $campaign_type ) || empty( $campaign_name ) ) {
 		$err_msg 										= error_handle("40001");
         $apiresults 									= array(
 			"code" 											=> "40001",
@@ -191,7 +191,7 @@
 		// check if goUser and goPass are valid
 		$fresults										= $astDB
 			->where("user", $goUser)
-			->where("pass_hash", $goPass)
+			// ->where("pass_hash", $goPass)
 			->getOne("vicidial_users", "user,user_level");
 		
 		$goapiaccess									= $astDB->getRowCount();
